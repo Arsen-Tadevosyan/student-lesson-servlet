@@ -74,6 +74,7 @@ public class LessonManager {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(sql);
         } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
