@@ -12,13 +12,14 @@ public class StudentManager {
     LessonManager lessonManager = new LessonManager();
 
     public void add(Student student) {
-        String sql = "insert into student(name,surname,email,age,lesson_id) values (?,?,?,?,?)";
+        String sql = "insert into student(name,surname,email,age,lesson_id,pic_name) values (?,?,?,?,?,?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, student.getName());
             preparedStatement.setString(2, student.getSurname());
             preparedStatement.setString(3, student.getEmail());
             preparedStatement.setInt(4, student.getAge());
             preparedStatement.setInt(5, student.getLesson().getId());
+            preparedStatement.setString(6, student.getPicName());
             preparedStatement.executeUpdate();
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
@@ -43,6 +44,7 @@ public class StudentManager {
                 String email = resultSet.getString("email");
                 int age = resultSet.getInt("age");
                 int lessonId = resultSet.getInt("lesson_id");
+                String picName = resultSet.getString("pic_name");
                 result.add(Student.builder()
                         .id(id)
                         .name(name)
@@ -50,6 +52,7 @@ public class StudentManager {
                         .email(email)
                         .age(age)
                         .lesson(lessonManager.getById(lessonId))
+                        .picName(picName)
                         .build());
             }
 
@@ -81,6 +84,7 @@ public class StudentManager {
                         .email(resultSet.getString("email"))
                         .age(resultSet.getInt("age"))
                         .lesson(lessonManager.getById(lessonId))
+                        .picName("pic_name")
                         .build();
             }
         } catch (SQLException e) {

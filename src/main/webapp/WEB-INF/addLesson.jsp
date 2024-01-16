@@ -15,7 +15,7 @@
     Lesson name: <input type="text" name="lessonName"><br>
     Lesson Duration: <input type="text" name="lessonDuration"><br>
     Lesson LecturerName: <input type="text" name="lessonLecturerName"><br>
-    Lesson Price: <input type="text" name="lessonPrice"><br>
+    Lesson Price: <input type="number" name="lessonPrice"><br>
     <input type="submit" value="add">
 </form>
 

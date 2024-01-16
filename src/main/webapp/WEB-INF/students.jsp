@@ -18,9 +18,10 @@
 
 <span>Students</span><a href="/addStudent">AddStudent</a>
 
-<table>
+<table border="1">
     <tr>
         <th>id</th>
+        <th>picture</th>
         <th>name</th>
         <th>surname</th>
         <th>email</th>
@@ -34,6 +35,12 @@
     %>
     <tr>
         <td><%=student.getId()%>
+        </td>
+        <td><%if (student.getPicName() != null) {%>
+            <img src="/downloadImage?imageName=<%= student.getPicName()%>" width="30">
+            <% } else {%>
+            <span>no picture</span>
+            <%}%>
         </td>
         <td><%=student.getName()%>
         </td>
