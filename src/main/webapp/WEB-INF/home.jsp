@@ -9,5 +9,6 @@
 <br/>
 <a href="/lessons">lessons</a>
 <a href="/students">students</a>
+<a href="/logout">logout</a>
 </body>
 </html>

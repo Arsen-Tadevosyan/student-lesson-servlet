@@ -1,5 +1,6 @@
 <%@ page import="com.example.studentlessonservlet.model.Lesson" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.List" %>
+<%@ page import="com.example.studentlessonservlet.manager.UserManager" %><%--
   Created by IntelliJ IDEA.
   User: User
   Date: 12.01.2024
@@ -15,6 +16,10 @@
 <% List<Lesson> lessons = (List<Lesson>) request.getAttribute("lessons"); %>
 
 <span>Lessons</span><a href="/addLesson">AddLesson</a>
+<br>
+<%if (session.getAttribute("msg") != null) {%>
+<span style="color: red"><%=session.getAttribute("msg")%></span>
+<%}%>
 
 <table>
     <tr>
@@ -22,6 +27,7 @@
         <th>name</th>
         <th>duration</th>
         <th>lecturerName</th>
+        <th>user_name</th>
         <th>price</th>
         <th>delete</th>
     </tr>
@@ -36,6 +42,8 @@
         <td><%=lesson.getDuration()%>
         </td>
         <td><%=lesson.getLecturerName()%>
+        </td>
+        <td><%=lesson.getUser().getName()%>
         </td>
         <td><%=lesson.getPrice()%>
         </td>

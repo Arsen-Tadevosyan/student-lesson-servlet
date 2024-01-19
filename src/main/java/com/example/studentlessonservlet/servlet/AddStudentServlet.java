@@ -4,6 +4,7 @@ import com.example.studentlessonservlet.manager.LessonManager;
 import com.example.studentlessonservlet.manager.StudentManager;
 import com.example.studentlessonservlet.model.Lesson;
 import com.example.studentlessonservlet.model.Student;
+import com.example.studentlessonservlet.model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -29,7 +30,8 @@ public class AddStudentServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Lesson> lessons = lessonManager.getLessons();
+        User user = (User) req.getSession().getAttribute("user");
+        List<Lesson> lessons = lessonManager.getLessonByUser(user);
         req.setAttribute("lessons", lessons);
         req.getRequestDispatcher("/WEB-INF/addStudent.jsp").forward(req, resp);
     }
@@ -42,22 +44,30 @@ public class AddStudentServlet extends HttpServlet {
         String studentAge = req.getParameter("studentAge");
         String studentLessonId = req.getParameter("studentLesson_id");
         Part picture = req.getPart("picture");
+        User user = (User) req.getSession().getAttribute("user");
 
         String pictureName = null;
         if (picture != null && picture.getSize() > 0) {
             pictureName = System.currentTimeMillis() + "_" + picture.getSubmittedFileName();
             picture.write(UPLOAD_DIRECTORY + File.separator + pictureName);
         }
+        Student byEmail = studentManager.getByEmail(studentEmail);
+        if (byEmail == null) {
+            Lesson lesson = lessonManager.getById(Integer.parseInt(studentLessonId));
+            studentManager.add(Student.builder()
+                    .name(studentName)
+                    .surname(studentSurname)
+                    .email(studentEmail)
+                    .age(Integer.parseInt(studentAge))
+                    .lesson(lesson)
+                    .picName(pictureName)
+                    .user(user)
+                    .build());
+            resp.sendRedirect("/students");
+        } else {
+            req.getSession().setAttribute("msg", "there already is");
+            resp.sendRedirect("/students");
+        }
 
-        Lesson lesson = lessonManager.getById(Integer.parseInt(studentLessonId));
-        studentManager.add(Student.builder()
-                .name(studentName)
-                .surname(studentSurname)
-                .email(studentEmail)
-                .age(Integer.parseInt(studentAge))
-                .lesson(lesson)
-                .picName(pictureName)
-                .build());
-        resp.sendRedirect("/students");
     }
 }
