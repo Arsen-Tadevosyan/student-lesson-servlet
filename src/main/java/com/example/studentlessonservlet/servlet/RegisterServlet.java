@@ -20,12 +20,18 @@ public class RegisterServlet extends HttpServlet {
         String surname = req.getParameter("surname");
         String email = req.getParameter("email");
         String password = req.getParameter("password");
-        userManager.add(User.builder()
-                .name(name)
-                .surname(surname)
-                .email(email)
-                .password(password)
-                .build());
-        resp.sendRedirect("/");
+        User userByEmail = userManager.getUserByEmail(email);
+        if (userByEmail == null) {
+            userManager.add(User.builder()
+                    .name(name)
+                    .surname(surname)
+                    .email(email)
+                    .password(password)
+                    .build());
+            resp.sendRedirect("/");
+        } else {
+            resp.sendRedirect("/");
+        }
+
     }
 }
